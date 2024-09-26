@@ -1,4 +1,9 @@
 import os
+import ollama
+from ollama import Client
+from textwrap import dedent
+client = Client(host='http://localhost:11434')
+
 
 def load_and_split_file(file_path, delimiter):
     """
@@ -21,12 +26,28 @@ def load_and_split_file(file_path, delimiter):
 
     # Split the file content using the specified delimiter
     split_content = file_content.split(delimiter)
-    
+
     # Apply .strip() to remove leading/trailing whitespace from each section
     stripped_content = [section.strip() for section in split_content]
 
-    return stripped_content
+    return file_content, stripped_content
 
+def add_context(document, chunklist):
+    try:
+        for idx, section in enumerate(chunklist):
+            contextprompt = f"""\
+<document>
+{document}
+</document>
+Here is the chunk we want to situate within the whole document
+<chunk>
+{section}
+</chunk>
+Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Answer only with the succinct context and nothing else."""
+            result = ollama.generate(model="gemma2:2b-instruct-q4_K_M", prompt=contextprompt)
+            print(f"\n+++++++++ Chunk {idx+1} of {len(chunklist)}\nOriginal Chunk:\n{section}\n\nContext:\n{result.get('response')}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     # Replace with your file path and delimiter
@@ -34,9 +55,11 @@ if __name__ == "__main__":
     delimiter = "-----------------"
 
     try:
-        split_strings = load_and_split_file(file_path, delimiter)
+        whole_string, split_strings = load_and_split_file(file_path, delimiter)
         # Output the list of split strings
         for idx, section in enumerate(split_strings):
             print(f"Section {idx + 1}:\n{section}\n")
+        add_context(whole_string, split_strings)
     except Exception as e:
         print(f"Error: {e}")
+
