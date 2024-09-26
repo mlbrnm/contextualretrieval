@@ -1,8 +1,5 @@
 import os
 import ollama
-from ollama import Client
-from textwrap import dedent
-client = Client(host='http://localhost:11434')
 
 
 def load_and_split_file(file_path, delimiter):

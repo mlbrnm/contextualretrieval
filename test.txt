@@ -1,7 +1,7 @@
-My name is Terry. Pickled peppers.
+My name is Melbourne. This is a test document for the contextual retrieval system.
 -----------------
-Tickled peppers.
+This is a section about turkeys.
 -----------------
-Slumdog.
+This is a section about velociraptors.
 -----------------
-Bonanza.
+This is the conclusion.
