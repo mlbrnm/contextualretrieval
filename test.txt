@@ -1,7 +1,0 @@
-My name is Melbourne. This is a test document for the contextual retrieval system.
------------------
-This is a section about turkeys.
------------------
-This is a section about velociraptors.
------------------
-This is the conclusion.
