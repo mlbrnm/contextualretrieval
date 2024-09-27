@@ -3,7 +3,7 @@ from contextgeneration import load_and_split_doc, generate_context
 from init import DELIMITER, DOCFOLDER
 
 def get_docs_list(folder_path):
-    return [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+    return [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f)) and f != '.gitkeep']
 
 def process_document(filename, folder_path):
     file_path = os.path.join(folder_path, filename)
