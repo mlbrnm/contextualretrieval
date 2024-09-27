@@ -18,9 +18,10 @@ Navigate to repository folder and do the following to use the right Python. I'm 
 pyenv install 3.11.0b4
 pyenv local 3.11.0b4
 ```
-Install the ollama module.
+Install the ollama module and qdrant.
 ```
 pyenv exec pip install ollama
+pyenv exec pip install qdrant-client
 ```
 Run main.py.
 ```
