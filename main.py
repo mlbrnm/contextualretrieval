@@ -55,7 +55,7 @@ Here is the chunk we want to situate within the whole document
 <chunk>
 {section}
 </chunk>
-Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Answer only with the succinct context and nothing else."""
+Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Include information that would be required to understand the chunk if separated from the rest of the document. Answer only with the succinct context and nothing else."""
             result = ollama.generate(model=MODEL, prompt=contextprompt, options={"num_ctx":CTXLENGTH})
             context_responses.append(result.get('response'))
     except Exception as e:
@@ -73,7 +73,9 @@ if __name__ == "__main__":
         #for idx, section in enumerate(split_strings):
         #    print(f"Section {idx + 1}:\n{section}\n")
         context = generate_context(whole_string, split_strings)
-        for idx, section in enumerate(split_strings):
-            print(f"+++++ Chunk {idx + 1} of {len(split_strings)} +++++\nOriginal:\n{section}\n\nContext:\n{context[idx]}\n\n")
+        newfilename = "contexted_" + file_path
+        with open(newfilename, 'w') as file:
+            for idx, section in enumerate(split_strings):
+                file.write(f"+++++ Chunk {idx + 1} of {len(split_strings)} +++++\nOriginal:\n{section}\n\nContext:\n{context[idx]}\n\n")
     except Exception as e:
         print(f"Error: {e}")
