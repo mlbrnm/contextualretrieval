@@ -1,5 +1,19 @@
 import os
 import ollama
+import json
+
+def load_config():
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+    return config
+
+config = load_config()
+MODEL = config['model']
+CTXLENGTH = config['contextlength']
+CONSTANTCONTEXT = config['constantcontext']
+DELIMITER = config['delimiter']
+FILENAME = config['filepath']
+
 
 
 def load_and_split_doc(file_path, delimiter):
@@ -42,7 +56,7 @@ Here is the chunk we want to situate within the whole document
 {section}
 </chunk>
 Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Answer only with the succinct context and nothing else."""
-            result = ollama.generate(model="llama3.1:8b-instruct-q8_0", prompt=contextprompt, options={"num_ctx":131072}) #gemma2:2b-instruct-q4_K_M
+            result = ollama.generate(model=MODEL, prompt=contextprompt, options={"num_ctx":CTXLENGTH})
             context_responses.append(result.get('response'))
     except Exception as e:
         print(f"Error: {e}")
@@ -50,14 +64,14 @@ Please give a short succinct context to situate this chunk within the overall do
 
 if __name__ == "__main__":
     # Replace with your file path and delimiter
-    file_path = "test.txt"
-    delimiter = "-+-+-+-"
+    file_path = FILENAME
+    delimiter = DELIMITER
 
     try:
         whole_string, split_strings = load_and_split_doc(file_path, delimiter)
         # Output the list of split strings
-        for idx, section in enumerate(split_strings):
-            print(f"Section {idx + 1}:\n{section}\n")
+        #for idx, section in enumerate(split_strings):
+        #    print(f"Section {idx + 1}:\n{section}\n")
         context = generate_context(whole_string, split_strings)
         for idx, section in enumerate(split_strings):
             print(f"+++++ Chunk {idx + 1} of {len(split_strings)} +++++\nOriginal:\n{section}\n\nContext:\n{context[idx]}\n\n")
