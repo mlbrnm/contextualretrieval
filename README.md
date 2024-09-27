@@ -1,12 +1,19 @@
-https://www.anthropic.com/news/contextual-retrieval
+<p align="center">
+<img src="https://i.imgur.com/NUs8MWf.png" width="600" />
+</p>
+<p align="center">https://www.anthropic.com/news/contextual-retrieval</p>
+
+---
 
 This is a script / proof of concept that follows Anthropic's suggestions for improving RAG performance using 'contextual retrieval'.
 
-The document to ingest is split by a predefined delimiter (I'm using -+-+-+- and inserting them manually where I want the chunks split).
+Documents are ingested from a folder (`\docs2process`), and split into chunks based on a predefined delimiter. I am using `-+-+-+-` and manually inserting them where I think the documents should be divided.
 
-The chunks are sent 1 by 1 to the Ollama model, with a prompt requesting a succinct summary of all the context required to understand the chunk.
+The chunks are sent one-by-one to the Ollama model, with a prompt requesting a succinct summary of all the context required to understand the chunk.
 
-The chunks and their new context blocks are then turned into embeddings and ingested into the qdrant database for use in a RAG system.
+A new document is then saved as `contexted_ORIGINALFILENAME.EXT`.
+
+I am working on improving the script so that chunks and their new context blocks are then turned into embeddings and ingested into the qdrant database for direct use in a RAG system.
 
 ## Installation / Prerequisites
 Testing was done in a Python 3.11.0b4 environment because I'm using [PrivateGPT](https://docs.privategpt.dev/installation/getting-started/installation) and that's what they use.
