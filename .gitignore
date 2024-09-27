@@ -1,2 +1,5 @@
 *.txt
 *.md
+__pycache__/contextgeneration.cpython-311.pyc
+__pycache__/init.cpython-311.pyc
+__pycache__/main.cpython-311.pyc
