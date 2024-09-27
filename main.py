@@ -42,7 +42,7 @@ Here is the chunk we want to situate within the whole document
 {section}
 </chunk>
 Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Answer only with the succinct context and nothing else."""
-            result = ollama.generate(model="llama3.1:8b-instruct-q8_0", prompt=contextprompt, options={"num_ctx":131072})
+            result = ollama.generate(model="llama3.1:8b-instruct-q8_0", prompt=contextprompt, options={"num_ctx":131072}) #gemma2:2b-instruct-q4_K_M
             context_responses.append(result.get('response'))
     except Exception as e:
         print(f"Error: {e}")
