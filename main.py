@@ -2,7 +2,7 @@ import os
 import ollama
 
 
-def load_and_split_file(file_path, delimiter):
+def load_and_split_doc(file_path, delimiter):
     """
     Loads a file from the specified path and splits its content 
     by the given delimiter, returning the split parts as a list of strings.
@@ -29,7 +29,8 @@ def load_and_split_file(file_path, delimiter):
 
     return file_content, stripped_content
 
-def add_context(document, chunklist):
+def generate_context(document, chunklist):
+    context_responses = []
     try:
         for idx, section in enumerate(chunklist):
             contextprompt = f"""\
@@ -42,9 +43,10 @@ Here is the chunk we want to situate within the whole document
 </chunk>
 Please give a short succinct context to situate this chunk within the overall document for the purposes of improving search retrieval of the chunk. Answer only with the succinct context and nothing else."""
             result = ollama.generate(model="gemma2:2b-instruct-q4_K_M", prompt=contextprompt)
-            print(f"\n+++++++++ Chunk {idx+1} of {len(chunklist)}\nOriginal Chunk:\n{section}\n\nContext:\n{result.get('response')}")
+            context_responses.append(result.get('response'))
     except Exception as e:
         print(f"Error: {e}")
+    return context_responses
 
 if __name__ == "__main__":
     # Replace with your file path and delimiter
@@ -52,11 +54,11 @@ if __name__ == "__main__":
     delimiter = "-----------------"
 
     try:
-        whole_string, split_strings = load_and_split_file(file_path, delimiter)
+        whole_string, split_strings = load_and_split_doc(file_path, delimiter)
         # Output the list of split strings
         for idx, section in enumerate(split_strings):
             print(f"Section {idx + 1}:\n{section}\n")
-        add_context(whole_string, split_strings)
+        context = generate_context(whole_string, split_strings)
     except Exception as e:
         print(f"Error: {e}")
 
